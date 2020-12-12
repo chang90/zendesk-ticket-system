@@ -1,6 +1,7 @@
 import inquirer, { QuestionCollection } from 'inquirer';
 import { MainMenuAction } from './enum/MainMenuAction';
 import { SearchType } from './enum/SearchType';
+import { SearchableFields } from './interface/SearchableFields';
 
 const getActionFromMainMenu = async (): Promise<MainMenuAction | null> => {
   const mainMenuQuestion: QuestionCollection<{ mainMenuAction: MainMenuAction | null }> = {
@@ -45,9 +46,14 @@ const getSearchValue = async (): Promise<string | null> => {
   return result?.searchValue ? result?.searchValue : null;
 };
 
+const showSearchableFields = (SearchableFieldsList: Array<SearchableFields>) => {
+  console.log('showSearchableFields');
+};
+
 export {
   getActionFromMainMenu, 
   getTypeFromSearchMenu,
   getTermFromSearchMenu,
-  getSearchValue
+  getSearchValue,
+  showSearchableFields
 };
