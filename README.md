@@ -11,11 +11,6 @@ npm i
 ```
 to install node_modules
 
-## Run in dev mode
-```
-npm run start:dev
-```
-
 ## Run in production mode
 ```
 npm run start
@@ -30,3 +25,7 @@ npm run build
 ```
 npm run lint
 ```
+
+## Question
+
+- There is a `requester_id` term in search ticket list, but I cannot find this keyword inside user / org / ticket json file. What is that means?
