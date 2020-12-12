@@ -25,3 +25,8 @@ npm run start
 ```
 npm run build
 ```
+
+## lint checking
+```
+npm run lint
+```
