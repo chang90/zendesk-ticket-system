@@ -18,7 +18,7 @@ const main = async () => {
   const inputData: { [key in SearchType]: string } = {
     [SearchType.User]: 'users.json',
     [SearchType.Organization]: 'organizations.json',
-    [SearchType.Ticket]: 'users.json',
+    [SearchType.Ticket]: 'tickets.json',
   };
 
   const usersInfo = await readData(inputData[SearchType.User]);
