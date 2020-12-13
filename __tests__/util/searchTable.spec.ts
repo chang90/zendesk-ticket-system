@@ -199,8 +199,7 @@ describe('searchTable function', () => {
       ],
       'has_incidents': false,
       'due_at': '2016-07-31T02:37:50 -10:00',
-      'via': 'web',
-      
+      'via': 'web'
     }];
     expect(searchTable(filesInfo, searchConfig)).toEqual(output);
   });
