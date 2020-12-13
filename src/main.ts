@@ -2,6 +2,8 @@ import { MainMenuAction } from './enum/MainMenuAction';
 import { SearchType } from './enum/SearchType';
 import { FileData } from './interface/fileData';
 import { SearchableFields } from './interface/SearchableFields';
+import { readData } from './readData';
+import { getSearchableFieldsMap } from './util/getSearchableFieldsMap';
 
 import {
   getActionFromMainMenu,
@@ -16,62 +18,30 @@ const searchTable = (searchType: SearchType, searchTerm: string, searchValue: st
  return {};
 };
 
-const getSearchableFieldsList = (filesInfo: {[key in SearchType]: Array<FileData>} ): Array<SearchableFields> => {
-  console.log('getSearchableField');
-  const userSearchableFields: SearchableFields = {
-    searchType: SearchType.User,
-    fields: ['_id']
-   };
- return [userSearchableFields];
-};
-
-const readData = (fileDirection: string ): Array<FileData> => {
-  return [  {
-    '_id': 101,
-    'url': 'http://initech.zendesk.com/api/v2/organizations/101.json',
-    'external_id': '9270ed79-35eb-4a38-a46f-35725197ea8d',
-    'name': 'Enthaze',
-    'domain_names': [
-      'kage.com',
-      'ecratic.com',
-      'endipin.com',
-      'zentix.com'
-    ],
-    'created_at': '2016-05-21T11:10:28 -10:00',
-    'details': 'MegaCorp',
-    'shared_tickets': false,
-    'tags': [
-      'Fulton',
-      'West',
-      'Rodriguez',
-      'Farley'
-    ]
-  }];
-};
 
 
 const main = async () => {
   let isRunning = true;
   const inputData:{ [key in SearchType]: string } = {
-    [SearchType.User]: '../data/users.json',
-    [SearchType.Organization]: '../data/organizations.json',
-    [SearchType.Ticket]: '../data/users.json',
+    [SearchType.User]: 'users.json',
+    [SearchType.Organization]: 'organizations.json',
+    [SearchType.Ticket]: 'users.json',
   };
 
   
-  const usersInfo = readData(inputData[SearchType.User]);
-  const orgsInfo = readData(inputData[SearchType.Organization]);
-  const ticketsInfo = readData(inputData[SearchType.Ticket]);
+  const usersInfo = await readData(inputData[SearchType.User]);
+  const orgsInfo = await readData(inputData[SearchType.Organization]);
+  const ticketsInfo = await readData(inputData[SearchType.Ticket]);
 
-  let searchableFieldsList: Array<SearchableFields> = [];
+  let searchableFieldsList: {[key in SearchType]:SearchableFields};
 
   if(usersInfo && orgsInfo && ticketsInfo) {
     const filesInfo = {
-      [SearchType.User]: usersInfo,
+      [SearchType.User]: usersInfo as Array<FileData>,
       [SearchType.Organization]: orgsInfo,
       [SearchType.Ticket]: ticketsInfo,
     };
-    searchableFieldsList = getSearchableFieldsList(filesInfo);
+    searchableFieldsList = getSearchableFieldsMap(filesInfo);
   } else {
     console.log('Error: Some tables are missing, please update inputData config');
     return;
@@ -101,12 +71,7 @@ const main = async () => {
         break;
 
       case MainMenuAction.ViewList:
-        
-        if(searchableFieldsList.length > 0) {
-          showSearchableFields(searchableFieldsList);
-        } else {
-          console.log('No field able to search');
-        }
+        showSearchableFields(searchableFieldsList);
         break;
 
       case MainMenuAction.Quit:

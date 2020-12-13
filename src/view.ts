@@ -46,8 +46,15 @@ const getSearchValue = async (): Promise<string | null> => {
   return result?.searchValue ? result?.searchValue : null;
 };
 
-const showSearchableFields = (SearchableFieldsList: Array<SearchableFields>) => {
-  console.log('showSearchableFields');
+const showSearchableFields = (searchableFieldsList: { [key in SearchType]: SearchableFields }) => {
+  for (let searchableFields in searchableFieldsList) {
+    console.log('-------------------------------------------------');
+    console.log(`Search ${searchableFieldsList[searchableFields as SearchType].searchType} with`);
+    searchableFieldsList[searchableFields as SearchType].fields.forEach((field) => {
+      console.log(field);
+    });
+    console.log('\n');
+  }
 };
 
 export {
