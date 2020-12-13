@@ -1,52 +1,47 @@
 import { MainMenuAction } from './enum/MainMenuAction';
 import { SearchType } from './enum/SearchType';
-import { FileData } from './interface/fileData';
 import { SearchableFields } from './interface/SearchableFields';
 import { readData } from './readData';
 import { getSearchableFieldsMap } from './util/getSearchableFieldsMap';
+import { searchTable } from './util/searchTable';
 
 import {
   getActionFromMainMenu,
-  getSearchValue, 
-  getTermFromSearchMenu, 
+  getSearchValue,
   getTypeFromSearchMenu,
+  getValidTermFromSearchMenu,
   showSearchableFields
 } from './view';
 
-const searchTable = (searchType: SearchType, searchTerm: string, searchValue: string) => {
-  console.log('search table', searchType, searchTerm, searchValue);
- return {};
-};
-
-
-
 const main = async () => {
   let isRunning = true;
-  const inputData:{ [key in SearchType]: string } = {
+  const inputData: { [key in SearchType]: string } = {
     [SearchType.User]: 'users.json',
     [SearchType.Organization]: 'organizations.json',
     [SearchType.Ticket]: 'users.json',
   };
 
-  
   const usersInfo = await readData(inputData[SearchType.User]);
   const orgsInfo = await readData(inputData[SearchType.Organization]);
   const ticketsInfo = await readData(inputData[SearchType.Ticket]);
 
-  let searchableFieldsList: {[key in SearchType]:SearchableFields};
+ 
 
-  if(usersInfo && orgsInfo && ticketsInfo) {
-    const filesInfo = {
-      [SearchType.User]: usersInfo as Array<FileData>,
+  let searchableFieldsMap: { [key in SearchType]: SearchableFields };
+  let filesInfo = null;
+
+  if (usersInfo && orgsInfo && ticketsInfo) {
+    filesInfo = {
+      [SearchType.User]: usersInfo,
       [SearchType.Organization]: orgsInfo,
       [SearchType.Ticket]: ticketsInfo,
     };
-    searchableFieldsList = getSearchableFieldsMap(filesInfo);
+    searchableFieldsMap = getSearchableFieldsMap(filesInfo);
   } else {
     console.log('Error: Some tables are missing, please update inputData config');
     return;
   }
-  
+
   console.log('Hi, welcome to Zendesk Search');
 
   while (isRunning) {
@@ -56,12 +51,20 @@ const main = async () => {
 
       case MainMenuAction.Search:
         const searchType = await getTypeFromSearchMenu();
-        if(searchType) {
-          const searchTerm = await getTermFromSearchMenu();
+        if (searchType) {
+
+          let searchTerm = await getValidTermFromSearchMenu(searchableFieldsMap[searchType]);
+
           const searchValue = await getSearchValue();
 
-          if(searchTerm && searchValue) {
-            searchTable(searchType, searchTerm, searchValue);
+          if (searchTerm && searchValue) {
+            const searchConfig = {
+              searchType,
+              searchTerm,
+              searchValue
+            };
+            const searchResult = searchTable(filesInfo, searchConfig);
+            console.log(searchResult);
           } else {
             console.log('Unable to get Term or value');
           }
@@ -71,7 +74,7 @@ const main = async () => {
         break;
 
       case MainMenuAction.ViewList:
-        showSearchableFields(searchableFieldsList);
+        showSearchableFields(searchableFieldsMap);
         break;
 
       case MainMenuAction.Quit:

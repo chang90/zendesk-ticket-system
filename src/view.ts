@@ -2,6 +2,7 @@ import inquirer, { QuestionCollection } from 'inquirer';
 import { MainMenuAction } from './enum/MainMenuAction';
 import { SearchType } from './enum/SearchType';
 import { SearchableFields } from './interface/SearchableFields';
+import { isValidSearchTerm } from './util/isValidSearchTerm';
 
 const getActionFromMainMenu = async (): Promise<MainMenuAction | null> => {
   const mainMenuQuestion: QuestionCollection<{ mainMenuAction: MainMenuAction | null }> = {
@@ -36,6 +37,20 @@ const getTermFromSearchMenu = async (): Promise<string | null> => {
   return result?.term ? result?.term : null;
 };
 
+const getValidTermFromSearchMenu = async(searchableFields: SearchableFields): Promise<string | null> => {
+  let searchTerm = await getTermFromSearchMenu();
+  let searchTermIsValid = isValidSearchTerm(searchTerm, searchableFields);
+
+  let keepSearch = true;
+
+  while(!searchTermIsValid && keepSearch) {
+    console.log('Unable to find this term, please try another one');
+    searchTerm = await getTermFromSearchMenu();
+    searchTermIsValid = isValidSearchTerm(searchTerm, searchableFields);
+  }
+  return searchTerm;
+};
+
 const getSearchValue = async (): Promise<string | null> => {
   const searchValueQuestion: QuestionCollection<{ searchValue: string | null }> = {
     type: 'input',
@@ -61,6 +76,7 @@ export {
   getActionFromMainMenu, 
   getTypeFromSearchMenu,
   getTermFromSearchMenu,
+  getValidTermFromSearchMenu,
   getSearchValue,
   showSearchableFields
 };

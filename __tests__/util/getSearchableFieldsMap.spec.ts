@@ -1,6 +1,6 @@
-import { SearchType } from '../src/enum/SearchType';
-import { FileData } from '../src/interface/fileData';
-import { getSearchableFieldsMap } from '../src/util/getSearchableFieldsMap';
+import { SearchType } from '../../src/enum/SearchType';
+import { FileData } from '../../src/interface/fileData';
+import { getSearchableFieldsMap } from '../../src/util/getSearchableFieldsMap';
 
 describe('getSearchableFieldsMap function', () => {
   test('Able to generate SearchableFieldsList object when data is valid', async () => {

@@ -1,5 +1,5 @@
 import { SearchType } from '../enum/SearchType';
-import { FileData } from '../interface/fileData';
+import { FileData } from '../interface/FileData';
 import { SearchableFields } from '../interface/SearchableFields';
 
 export const getSearchableFieldsMap = (filesInfo: { [key in SearchType]: Array<FileData> }): { [key in SearchType]: SearchableFields } => {
