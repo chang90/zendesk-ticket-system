@@ -14,15 +14,15 @@ export const searchTable = (filesInfo: { [key in SearchType]: Array<FileData> },
   const userIdNameMap = filesInfo[SearchType.User] ? getIdNameMap(filesInfo[SearchType.User]) : {};
   const ticketAssigneeIdNameListMap = filesInfo[SearchType.Ticket] ? getTicketAssigneeIdSubjectListMap(filesInfo[SearchType.Ticket]) : {};
 
-  let rawResult: Array<FileData> | [] = [];
+  let result: Array<FileData> | [] = [];
   if (searchConfig?.searchTerm === FieldWithGroup.Tags || searchConfig?.searchTerm === FieldWithGroup.DomainNames) {
-    rawResult = searchFieldWithArrayDataType(filesInfo, searchConfig);
+    result = searchFieldWithArrayDataType(filesInfo, searchConfig);
   } else {
-    rawResult = searchFieldWithSimpleDataType(filesInfo, searchConfig);
+    result = searchFieldWithSimpleDataType(filesInfo, searchConfig);
   }
 
   if (searchConfig?.searchType === SearchType.User) {
-    rawResult.map((fileData: FileData) => {
+    result.map((fileData: FileData) => {
       const orgName = organizationIdNameMap[Number(fileData[FieldWithRelationship.OrganizationId])];
       if(orgName) {
         fileData[FieldWithRelationship.OrganizationName] = orgName;
@@ -35,12 +35,12 @@ export const searchTable = (filesInfo: { [key in SearchType]: Array<FileData> },
     });
 
   } else if(searchConfig?.searchType === SearchType.Ticket) {
-    rawResult.map((fileData: FileData) => {
+    result.map((fileData: FileData) => {
       const assigneeName = userIdNameMap[Number(fileData[FieldWithRelationship.AssigneeId])];
       if(assigneeName) {
         fileData[FieldWithRelationship.AssigneeName] = assigneeName;
       }
-      
+
       const submitterName = userIdNameMap[Number(fileData[FieldWithRelationship.SubmitterId])];
       if(submitterName) {
         fileData[FieldWithRelationship.SubmitterName] = submitterName;
@@ -54,7 +54,7 @@ export const searchTable = (filesInfo: { [key in SearchType]: Array<FileData> },
       return filesInfo;
     });
   }
-  return rawResult;
+  return result;
 };
 
 
