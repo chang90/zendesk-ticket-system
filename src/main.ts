@@ -10,6 +10,7 @@ import {
   getSearchValue,
   getTypeFromSearchMenu,
   getValidTermFromSearchMenu,
+  showResultTable,
   showSearchableFields
 } from './view';
 
@@ -62,7 +63,12 @@ const main = async () => {
               searchValue
             };
             const searchResult = searchTable(filesInfo, searchConfig);
-            console.log(searchResult);
+            if(searchResult?.length > 0) {
+              showResultTable(searchResult);
+            } else {
+              console.log('No results found');
+            }
+            
           } else {
             console.log('Unable to get Term or value');
           }

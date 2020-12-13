@@ -1,6 +1,7 @@
 import inquirer, { QuestionCollection } from 'inquirer';
 import { MainMenuAction } from './enum/MainMenuAction';
 import { SearchType } from './enum/SearchType';
+import { FileData } from './interface/fileData';
 import { SearchableFields } from './interface/SearchableFields';
 import { isValidSearchTerm } from './util/isValidSearchTerm';
 
@@ -72,11 +73,28 @@ const showSearchableFields = (searchableFieldsList: { [key in SearchType]: Searc
   }
 };
 
+const showResultTable = (searchTableResult: Array<FileData>) => {
+  searchTableResult.forEach((searchInfo) => {
+    const displayResultMap: {[key: string]:string | number | boolean} = {};
+    for (let key in searchInfo) {
+      if (Array.isArray(searchInfo[key])) {
+        (searchInfo[key] as Array<string>).forEach((item: string, index: number) => {
+          displayResultMap[`${key}_${index}`] = item;
+        });
+      } else {
+        displayResultMap[key] = searchInfo[key] as string | number | boolean;
+      }
+    }
+    console.table(displayResultMap);
+  });
+};
+
 export {
   getActionFromMainMenu, 
   getTypeFromSearchMenu,
   getTermFromSearchMenu,
   getValidTermFromSearchMenu,
   getSearchValue,
-  showSearchableFields
+  showSearchableFields,
+  showResultTable
 };
