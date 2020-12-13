@@ -1,7 +1,7 @@
 import { FileData } from '../../src/interface/fileData';
-import { getOrganizationIdNameMap } from '../../src/util/getOrganizationIdNameMap';
+import { getIdNameMap } from '../../src/util/getIdNameMap';
 
-describe('getOrganizationIdNameMap function', () => {
+describe('getIdNameMap function', () => {
   test('Able to generate organizationIdNameMap', async () => {
     const input:  Array<FileData> = [{
         '_id': 101,
@@ -27,6 +27,6 @@ describe('getOrganizationIdNameMap function', () => {
     const output = {
       101 : 'Enthaze'
     };
-    expect(getOrganizationIdNameMap(input)).toEqual(output);
+    expect(getIdNameMap(input)).toEqual(output);
   });
 });

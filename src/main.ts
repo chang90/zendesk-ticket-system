@@ -25,8 +25,6 @@ const main = async () => {
   const orgsInfo = await readData(inputData[SearchType.Organization]);
   const ticketsInfo = await readData(inputData[SearchType.Ticket]);
 
- 
-
   let searchableFieldsMap: { [key in SearchType]: SearchableFields };
   let filesInfo = null;
 
