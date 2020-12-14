@@ -13,45 +13,49 @@ export const search = (filesInfo: { [key in SearchType]: Array<FileData> }, sear
   const userIdNameMap = filesInfo[SearchType.User] ? getIdNameMap(filesInfo[SearchType.User]) : {};
   const ticketAssigneeIdSubjectsMap = filesInfo[SearchType.Ticket] ? getTicketAssigneeIdSubjectsMap(filesInfo[SearchType.Ticket]) : {};
 
-  let result: Array<FileData> | [] = [];
-
-  result = searchField(filesInfo, searchConfig);
-
+  const result = searchField(filesInfo, searchConfig);
 
   if (searchConfig?.searchType === SearchType.User) {
-    result.map((fileData: FileData) => {
+    return result.map((fileData: FileData) => {
       const orgName = organizationIdNameMap[Number(fileData[FieldWithRelationship.OrganizationId])];
-      if(orgName) {
-        fileData[FieldWithRelationship.OrganizationName] = orgName;
+      const fullFileData = {
+        ...fileData
+      };
+      if (orgName) {
+        fullFileData[FieldWithRelationship.OrganizationName] = orgName;
       }
       const ticketList = ticketAssigneeIdSubjectsMap[fileData[FieldWithRelationship.Id] as number];
-      if(ticketList?.length > 0) {
-        fileData[FieldWithRelationship.Tickets] = ticketList;
+      if (ticketList?.length > 0) {
+        fullFileData[FieldWithRelationship.Tickets] = ticketList;
       }
-      return filesInfo;
+      return fullFileData;
     });
 
-  } else if(searchConfig?.searchType === SearchType.Ticket) {
-    result.map((fileData: FileData) => {
+  } else if (searchConfig?.searchType === SearchType.Ticket) {
+    return result.map((fileData: FileData) => {
       const assigneeName = userIdNameMap[Number(fileData[FieldWithRelationship.AssigneeId])];
-      if(assigneeName) {
-        fileData[FieldWithRelationship.AssigneeName] = assigneeName;
+      const fullFileData = {
+        ...fileData
+      };
+      if (assigneeName) {
+        fullFileData[FieldWithRelationship.AssigneeName] = assigneeName;
       }
 
       const submitterName = userIdNameMap[Number(fileData[FieldWithRelationship.SubmitterId])];
-      if(submitterName) {
-        fileData[FieldWithRelationship.SubmitterName] = submitterName;
+      if (submitterName) {
+        fullFileData[FieldWithRelationship.SubmitterName] = submitterName;
       }
 
       const orgName = organizationIdNameMap[Number(fileData[FieldWithRelationship.OrganizationId])];
-      if(orgName) {
-        fileData[FieldWithRelationship.OrganizationName] = orgName;
+      if (orgName) {
+        fullFileData[FieldWithRelationship.OrganizationName] = orgName;
       }
 
-      return filesInfo;
+      return fullFileData;
     });
+  } else {
+    return result;
   }
-  return result;
 };
 
 
