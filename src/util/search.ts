@@ -5,8 +5,7 @@ import { FileData } from '../interface/FileData';
 import { SearchConfig } from '../interface/SearchConfig';
 import { getIdNameMap } from './getIdNameMap';
 import { getTicketAssigneeIdSubjectsMap } from './getTicketAssigneeIdSubjectsMap';
-import { searchFieldWithArrayDataType } from './searchFieldWithArrayDataType';
-import { searchFieldWithSimpleDataType } from './searchFieldWithSimpleDataType';
+import { searchField } from './searchField';
 
 export const search = (filesInfo: { [key in SearchType]: Array<FileData> }, searchConfig: SearchConfig): Array<FileData> | [] => {
 
@@ -15,11 +14,9 @@ export const search = (filesInfo: { [key in SearchType]: Array<FileData> }, sear
   const ticketAssigneeIdSubjectsMap = filesInfo[SearchType.Ticket] ? getTicketAssigneeIdSubjectsMap(filesInfo[SearchType.Ticket]) : {};
 
   let result: Array<FileData> | [] = [];
-  if (searchConfig?.searchTerm === FieldWithGroup.Tags || searchConfig?.searchTerm === FieldWithGroup.DomainNames) {
-    result = searchFieldWithArrayDataType(filesInfo, searchConfig);
-  } else {
-    result = searchFieldWithSimpleDataType(filesInfo, searchConfig);
-  }
+
+  result = searchField(filesInfo, searchConfig);
+
 
   if (searchConfig?.searchType === SearchType.User) {
     result.map((fileData: FileData) => {
