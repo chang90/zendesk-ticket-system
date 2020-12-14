@@ -17,7 +17,7 @@ const main = async () => {
 
   const filesInfo = await readData();
 
-  if(!filesInfo) {
+  if (!filesInfo) {
     return;
   }
 

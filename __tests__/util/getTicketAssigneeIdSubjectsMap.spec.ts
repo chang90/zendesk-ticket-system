@@ -1,4 +1,4 @@
-import { getTicketAssigneeIdSubjectListMap } from '../../src/util/getTicketAssigneeIdSubjectListMap';
+import { getTicketAssigneeIdSubjectsMap } from '../../src/util/getTicketAssigneeIdSubjectsMap';
 
 describe('getTicketAssigneeIdNameListMap function', () => {
   const input = [
@@ -33,6 +33,6 @@ describe('getTicketAssigneeIdNameListMap function', () => {
       24: ['A Catastrophe in Korea (North)']
     };
 
-    expect(getTicketAssigneeIdSubjectListMap(input)).toEqual(output);
+    expect(getTicketAssigneeIdSubjectsMap(input)).toEqual(output);
   });
 });

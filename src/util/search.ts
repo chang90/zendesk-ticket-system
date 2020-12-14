@@ -4,7 +4,7 @@ import { SearchType } from '../enum/SearchType';
 import { FileData } from '../interface/FileData';
 import { SearchConfig } from '../interface/SearchConfig';
 import { getIdNameMap } from './getIdNameMap';
-import { getTicketAssigneeIdSubjectListMap } from './getTicketAssigneeIdSubjectListMap';
+import { getTicketAssigneeIdSubjectsMap } from './getTicketAssigneeIdSubjectsMap';
 import { searchFieldWithArrayDataType } from './searchFieldWithArrayDataType';
 import { searchFieldWithSimpleDataType } from './searchFieldWithSimpleDataType';
 
@@ -12,7 +12,7 @@ export const search = (filesInfo: { [key in SearchType]: Array<FileData> }, sear
 
   const organizationIdNameMap = filesInfo[SearchType.Organization] ? getIdNameMap(filesInfo[SearchType.Organization]) : {};
   const userIdNameMap = filesInfo[SearchType.User] ? getIdNameMap(filesInfo[SearchType.User]) : {};
-  const ticketAssigneeIdNameListMap = filesInfo[SearchType.Ticket] ? getTicketAssigneeIdSubjectListMap(filesInfo[SearchType.Ticket]) : {};
+  const ticketAssigneeIdSubjectsMap = filesInfo[SearchType.Ticket] ? getTicketAssigneeIdSubjectsMap(filesInfo[SearchType.Ticket]) : {};
 
   let result: Array<FileData> | [] = [];
   if (searchConfig?.searchTerm === FieldWithGroup.Tags || searchConfig?.searchTerm === FieldWithGroup.DomainNames) {
@@ -27,7 +27,7 @@ export const search = (filesInfo: { [key in SearchType]: Array<FileData> }, sear
       if(orgName) {
         fileData[FieldWithRelationship.OrganizationName] = orgName;
       }
-      const ticketList = ticketAssigneeIdNameListMap[fileData[FieldWithRelationship.Id] as number];
+      const ticketList = ticketAssigneeIdSubjectsMap[fileData[FieldWithRelationship.Id] as number];
       if(ticketList?.length > 0) {
         fileData[FieldWithRelationship.Tickets] = ticketList;
       }
