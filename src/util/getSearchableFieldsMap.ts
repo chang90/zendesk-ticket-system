@@ -3,7 +3,7 @@ import { FileData } from '../interface/FileData';
 import { SearchableFields } from '../interface/SearchableFields';
 
 export const getSearchableFieldsMap = (filesInfo: { [key in SearchType]: Array<FileData> }): { [key in SearchType]: SearchableFields } => {
-  const result: any = {};
+  const result: { [key in SearchType]?: SearchableFields } = {};
 
   for (let fileType in filesInfo) {
     // Use the first element inside file array to analysis the fields
@@ -14,5 +14,5 @@ export const getSearchableFieldsMap = (filesInfo: { [key in SearchType]: Array<F
     };
     result[fileType as SearchType] = newSearchableField;
   }
-  return result;
+  return result as { [key in SearchType]: SearchableFields };
 };

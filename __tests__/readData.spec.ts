@@ -1,7 +1,8 @@
-import { readData } from '../src/readData';
-describe('readData function', () => {
+import { readSingleFile } from '../src/readData';
+
+describe('readSingleFile function', () => {
   test('Able to ready Data from json file', async() => {
-    const result = await readData('users.json');
+    const result = await readSingleFile('users.json');
     const firstResultElement = {
       '_id': 1,
       'url': 'http://initech.zendesk.com/api/v2/users/1.json',

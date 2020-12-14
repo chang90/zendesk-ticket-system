@@ -1,9 +1,7 @@
 import { MainMenuAction } from './enum/MainMenuAction';
-import { SearchType } from './enum/SearchType';
-import { SearchableFields } from './interface/SearchableFields';
 import { readData } from './readData';
 import { getSearchableFieldsMap } from './util/getSearchableFieldsMap';
-import { searchTable } from './util/searchTable';
+import { search } from './util/search';
 
 import {
   getActionFromMainMenu,
@@ -16,30 +14,14 @@ import {
 
 const main = async () => {
   let isRunning = true;
-  const inputData: { [key in SearchType]: string } = {
-    [SearchType.User]: 'users.json',
-    [SearchType.Organization]: 'organizations.json',
-    [SearchType.Ticket]: 'tickets.json',
-  };
 
-  const usersInfo = await readData(inputData[SearchType.User]);
-  const orgsInfo = await readData(inputData[SearchType.Organization]);
-  const ticketsInfo = await readData(inputData[SearchType.Ticket]);
+  const filesInfo = await readData();
 
-  let searchableFieldsMap: { [key in SearchType]: SearchableFields };
-  let filesInfo = null;
-
-  if (usersInfo && orgsInfo && ticketsInfo) {
-    filesInfo = {
-      [SearchType.User]: usersInfo,
-      [SearchType.Organization]: orgsInfo,
-      [SearchType.Ticket]: ticketsInfo,
-    };
-    searchableFieldsMap = getSearchableFieldsMap(filesInfo);
-  } else {
-    console.log('Error: Some tables are missing, please update inputData config');
+  if(!filesInfo) {
     return;
   }
+
+  const searchableFieldsMap = getSearchableFieldsMap(filesInfo);
 
   console.log('Hi, welcome to Zendesk Search');
 
@@ -52,7 +34,7 @@ const main = async () => {
         const searchType = await getTypeFromSearchMenu();
         if (searchType) {
 
-          let searchTerm = await getValidTermFromSearchMenu(searchableFieldsMap[searchType]);
+          const searchTerm = await getValidTermFromSearchMenu(searchableFieldsMap[searchType]);
 
           const searchValue = await getSearchValue();
 
@@ -62,13 +44,13 @@ const main = async () => {
               searchTerm,
               searchValue
             };
-            const searchResult = searchTable(filesInfo, searchConfig);
-            if(searchResult?.length > 0) {
+            const searchResult = search(filesInfo, searchConfig);
+            if (searchResult?.length > 0) {
               showResultTable(searchResult);
             } else {
               console.log('No results found');
             }
-            
+
           } else {
             console.log('Unable to get Term or value');
           }
@@ -87,6 +69,7 @@ const main = async () => {
 
       default:
         console.log('Something went wrong...');
+        isRunning = false;
     }
   }
 };

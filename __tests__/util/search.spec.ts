@@ -1,8 +1,8 @@
 import { SearchType } from '../../src/enum/SearchType';
 import { FileData } from '../../src/interface/fileData';
-import { searchTable } from '../../src/util/searchTable';
+import { search } from '../../src/util/search';
 
-describe('searchTable function', () => {
+describe('search function', () => {
   const filesInfo: { [key in SearchType]: Array<FileData> } = {
     Users: [
       {
@@ -165,7 +165,7 @@ describe('searchTable function', () => {
       'role': 'admin',
 
     }];
-    expect(searchTable(filesInfo, searchConfig)).toEqual(output);
+    expect(search(filesInfo, searchConfig)).toEqual(output);
   });
 
   test('Able to find and return ticket info if exist', () => {
@@ -201,7 +201,7 @@ describe('searchTable function', () => {
       'due_at': '2016-07-31T02:37:50 -10:00',
       'via': 'web'
     }];
-    expect(searchTable(filesInfo, searchConfig)).toEqual(output);
+    expect(search(filesInfo, searchConfig)).toEqual(output);
   });
 
   test('Return empty array if no element exist', () => {
@@ -212,6 +212,6 @@ describe('searchTable function', () => {
       searchTerm: 'tags',
       searchValue: 'Not exist'
     };
-    expect(searchTable(filesInfo, searchConfig)).toEqual(output);
+    expect(search(filesInfo, searchConfig)).toEqual(output);
   });
 });

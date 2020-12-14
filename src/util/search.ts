@@ -8,7 +8,7 @@ import { getTicketAssigneeIdSubjectListMap } from './getTicketAssigneeIdSubjectL
 import { searchFieldWithArrayDataType } from './searchFieldWithArrayDataType';
 import { searchFieldWithSimpleDataType } from './searchFieldWithSimpleDataType';
 
-export const searchTable = (filesInfo: { [key in SearchType]: Array<FileData> }, searchConfig: SearchConfig): Array<FileData> | [] => {
+export const search = (filesInfo: { [key in SearchType]: Array<FileData> }, searchConfig: SearchConfig): Array<FileData> | [] => {
 
   const organizationIdNameMap = filesInfo[SearchType.Organization] ? getIdNameMap(filesInfo[SearchType.Organization]) : {};
   const userIdNameMap = filesInfo[SearchType.User] ? getIdNameMap(filesInfo[SearchType.User]) : {};
