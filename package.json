@@ -11,7 +11,7 @@
     "lint": "eslint src/**"
   },
   "keywords": [],
-  "author": "",
+  "author": "Chang",
   "license": "ISC",
   "devDependencies": {
     "@types/inquirer": "^7.3.1",
