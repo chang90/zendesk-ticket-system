@@ -1,4 +1,3 @@
-import { FieldWithGroup } from '../enum/FieldWithGroup';
 import { FieldWithRelationship } from '../enum/FieldWithRelationship';
 import { SearchType } from '../enum/SearchType';
 import { FileData } from '../interface/FileData';

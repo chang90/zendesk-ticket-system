@@ -12,13 +12,12 @@ import {
   showSearchableFields
 } from './view';
 
-const main = async () => {
+export const main = async () => {
   let isRunning = true;
 
   const filesInfo = await readData();
-
   if (!filesInfo) {
-    return;
+    return 'System closed by error';
   }
 
   const searchableFieldsMap = getSearchableFieldsMap(filesInfo);
@@ -72,5 +71,7 @@ const main = async () => {
         isRunning = false;
     }
   }
+  return 'System closed';
 };
+
 main();
