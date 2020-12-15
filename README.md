@@ -47,3 +47,11 @@ npm run start ./data/user.json ./data/ticket.json ./data/organization.json
 ```
 
 - Make this project as a package, and public it into npm.
+
+## Problem solving
+- This project is written in Windows env, check the `\` or `/` problem for file path, if you are a mac user.
+
+readData.ts
+```
+fileContents = await fs.promises.readFile(__dirname + '\\data\\' + fileName, 'utf-8');
+```
